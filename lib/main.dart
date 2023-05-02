@@ -29,6 +29,7 @@ import 'Extra/SelectShop.dart';
 import 'Extra/Shop.dart';
 import 'Firebase/firebase_options.dart';
 import 'Invoices/invoice.dart';
+import 'Login/login_screen.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
@@ -67,7 +68,7 @@ void main() async {
 
   await waitScreenSizeAvailable();
   runApp(MaterialApp(
-    home: const InvoiceList(),
+    home: const LoginScreen(),
     title: "MiniPos",
     navigatorObservers: [routeObserver],
   ));

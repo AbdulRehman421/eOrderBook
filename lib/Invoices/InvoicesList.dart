@@ -1,6 +1,7 @@
 import 'package:Mini_Bill/Customer/Customer.dart';
 import 'package:Mini_Bill/Invoices/InvoiceData.dart';
 import 'package:Mini_Bill/Invoices/invoice.dart';
+import 'package:Mini_Bill/Login/login_screen.dart';
 import 'package:Mini_Bill/Products/ReSelectProducts.dart';
 import 'package:Mini_Bill/Widgets/ConstantWidget.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -92,6 +93,21 @@ class _InvoiceListState extends State<InvoiceList> with RouteAware {
           title: const Text("Mini Order Book"),
           actions: [
             IconButton(
+                onPressed: () async {
+                  bool confirmDelete =
+                  await showDeleteConfirmationDialog(context);
+                  if (confirmDelete) {
+                    // Perform delete action
+                    deleteAll();
+                  } else {
+                    // Cancel delete action
+                  }
+                },
+                icon: Icon(
+                  Icons.delete_sharp,
+                  color: Colors.redAccent,
+                )),
+            IconButton(
               icon: Icon(Icons.sync),
               onPressed: () {
                 getData();
@@ -179,19 +195,16 @@ class _InvoiceListState extends State<InvoiceList> with RouteAware {
           ],
           leading: IconButton(
               onPressed: () async {
-                bool confirmDelete =
-                    await showDeleteConfirmationDialog(context);
-                if (confirmDelete) {
+                bool confirmLogout =
+                await showLogoutConfirmationDialog(context);
+                if (confirmLogout) {
                   // Perform delete action
-                  deleteAll();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
                 } else {
                   // Cancel delete action
                 }
               },
-              icon: Icon(
-                Icons.delete_sharp,
-                color: Colors.redAccent,
-              )),
+              icon: Icon(Icons.login)),
         ),
         body: Stack(
           children: [
@@ -891,6 +904,30 @@ class _InvoiceListState extends State<InvoiceList> with RouteAware {
             ),
             TextButton(
               child: const Text("DELETE"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }  Future<bool> showLogoutConfirmationDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("                Logout",style: TextStyle(fontWeight: FontWeight.bold)),
+          content: const Text("Are you sure you want to Logout?"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("CANCEL"),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: const Text("Logout"),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
